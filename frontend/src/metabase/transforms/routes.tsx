@@ -17,6 +17,7 @@ import {
 } from "./pages/NewTransformPage";
 import { RunListPage } from "./pages/RunListPage";
 import { TransformDependenciesPage } from "./pages/TransformDependenciesPage";
+import { TransformGraphRunListPage } from "./pages/TransformGraphRunListPage";
 import { TransformIndexesPage } from "./pages/TransformIndexesPage";
 import { TransformListPage } from "./pages/TransformListPage";
 import { TransformQueryPage } from "./pages/TransformQueryPage";
@@ -28,7 +29,10 @@ export function getDataStudioTransformRoutes() {
   return (
     <Route component={TransformsNotDisabled}>
       <IndexRoute component={TransformListPage} />
-      <Route path="runs" component={RunListPage} />
+      <Route path="runs">
+        <IndexRoute component={TransformGraphRunListPage} />
+        <Route path="individual" component={RunListPage} />
+      </Route>
       <Route path="jobs" component={JobSectionLayout}>
         <IndexRoute component={JobListPage} />
         <Route path="new" component={NewJobPage} />
