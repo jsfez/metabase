@@ -157,7 +157,7 @@ describe("DataStudioLayout", () => {
         remoteSyncTransforms: true,
       });
 
-      const transformsTab = await screen.findByLabelText("Transforms");
+      const transformsTab = await screen.findByLabelText("Data transformation");
       await waitFor(() => {
         expect(
           within(transformsTab).getByTestId("remote-sync-status"),
@@ -178,7 +178,7 @@ describe("DataStudioLayout", () => {
         expect(screen.getByTestId("data-studio-nav")).toBeInTheDocument();
       });
 
-      const transformsTab = screen.getByLabelText("Transforms");
+      const transformsTab = screen.getByLabelText("Data transformation");
       expect(
         within(transformsTab).queryByTestId("remote-sync-status"),
       ).not.toBeInTheDocument();
@@ -197,7 +197,7 @@ describe("DataStudioLayout", () => {
         expect(screen.getByTestId("data-studio-nav")).toBeInTheDocument();
       });
 
-      const transformsTab = screen.getByLabelText("Transforms");
+      const transformsTab = screen.getByLabelText("Data transformation");
       expect(
         within(transformsTab).queryByTestId("remote-sync-status"),
       ).not.toBeInTheDocument();
@@ -212,7 +212,7 @@ describe("DataStudioLayout", () => {
         expect(screen.getByTestId("data-studio-nav")).toBeInTheDocument();
       });
 
-      expect(screen.getByLabelText("Transforms")).toBeInTheDocument();
+      expect(screen.getByLabelText("Data transformation")).toBeInTheDocument();
     });
 
     it("should show Transforms tab for a non-admin with transforms permission", async () => {
@@ -226,7 +226,7 @@ describe("DataStudioLayout", () => {
         expect(screen.getByTestId("data-studio-nav")).toBeInTheDocument();
       });
 
-      expect(screen.getByLabelText("Transforms")).toBeInTheDocument();
+      expect(screen.getByLabelText("Data transformation")).toBeInTheDocument();
     });
 
     it("should hide Transforms tab for a non-admin without transforms permission", async () => {

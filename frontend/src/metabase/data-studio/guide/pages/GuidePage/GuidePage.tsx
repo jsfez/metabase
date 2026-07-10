@@ -37,12 +37,12 @@ export function GuidePage() {
                   {jt`In Data Studio, ${(
                     <strong key="transforms">{t`Transforms`}</strong>
                   )} materialize SQL or Python as tables in your warehouse and sync them back into ${applicationName}. Find them under ${(
-                    <strong key="data-transformation">{t`Data transformation`}</strong>
-                  )} — use ${(
+                    <strong key="data">{t`Data`}</strong>
+                  )} — use the ${(
                     <strong key="jobs">{t`Jobs`}</strong>
-                  )} to schedule tagged batches and ${(
+                  )} tab to schedule tagged batches and the ${(
                     <strong key="runs">{t`Runs`}</strong>
-                  )} to inspect execution history. Tag transforms to group them and run them with jobs.`}
+                  )} tab to inspect execution history. Tag transforms to group them and run them with jobs.`}
                 </Text>
               </Stack>
             </Box>

@@ -197,7 +197,7 @@ export type UserKeyValue =
   | {
       namespace: "data_studio";
       key: string;
-      value: boolean;
+      value: boolean | string;
     }
   | {
       namespace: "dependency_diagnostics";

@@ -11,9 +11,9 @@ import {
 import type { State } from "metabase/redux/store";
 import { IndexRoute, Route, type RouteComponent } from "metabase/router";
 import { getDataStudioTransformRoutes } from "metabase/transforms/routes";
-import * as Urls from "metabase/urls";
 
 import { DataSectionLayout } from "./app/pages/DataSectionLayout";
+import { DataStudioIndexRedirect } from "./app/pages/DataStudioIndexRedirect";
 import { DataStudioLayout } from "./app/pages/DataStudioLayout";
 import { DependenciesSectionLayout } from "./app/pages/DependenciesSectionLayout";
 import { GitSyncSectionLayout } from "./app/pages/GitSyncSectionLayout";
@@ -38,11 +38,7 @@ export function getDataStudioRoutes(
   return (
     <Route component={CanAccessDataStudio}>
       <Route path="data-studio" component={DataStudioLayout}>
-        <IndexRoute
-          onEnter={(_state, replace) => {
-            replace(Urls.dataStudioGuide());
-          }}
-        />
+        <IndexRoute component={DataStudioIndexRedirect} />
         <Route path="guide" component={GuidePage} />
         <Route path="data" component={CanAccessDataModel}>
           <Route component={DataSectionLayout}>

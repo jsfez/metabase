@@ -32,7 +32,7 @@ describe("GuidePage", () => {
     renderWithProviders(<GuidePage />);
 
     expect(screen.getByTestId("guide-transforms-section")).toHaveTextContent(
-      /Find them under Data transformation/,
+      /Find them under Data/,
     );
     expect(screen.getByTestId("guide-publish-section")).toHaveTextContent(
       /Connected data is where you browse synced tables/,

@@ -91,6 +91,16 @@ const setupNavbarEndpoints = (isOpened = true) => {
     key: "isNavbarOpened",
     value: isOpened,
   });
+  setupUserKeyValueEndpoints({
+    namespace: "data_studio",
+    key: "hasVisitedDataStudio",
+    value: false,
+  });
+  setupUserKeyValueEndpoints({
+    namespace: "data_studio",
+    key: "lastTopLevelRoute",
+    value: null,
+  });
 };
 
 // ============================================================================

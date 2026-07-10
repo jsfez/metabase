@@ -868,7 +868,9 @@ LIMIT
       cy.wait("@createTag");
 
       cy.log("Navigate to transform B");
-      H.DataStudio.nav().findByRole("link", { name: "Transforms" }).click();
+      H.DataStudio.nav()
+        .findByRole("link", { name: "Data transformation" })
+        .click();
       cy.findByRole("treegrid").findByText("Transform B").click();
 
       cy.log("Remove the new tag from transform B");
@@ -3208,7 +3210,7 @@ describe("scenarios > admin > transforms > jobs", () => {
         .should("deep.equal", { active: true });
       H.DataStudio.Jobs.editor().findByText("Disabled").should("not.exist");
 
-      H.DataStudio.nav().findByRole("link", { name: "Jobs" }).click();
+      H.DataStudio.Transforms.jobsTab().click();
 
       cy.log("bulk-disable: cancel from the modal does not fire the mutation");
       openBulkActionsMenu();
@@ -3882,11 +3884,11 @@ function verifyDisconnectedDatabaseBanner() {
 }
 
 function getTransformsNavLink() {
-  return H.DataStudio.nav().findByRole("link", { name: "Transforms" });
+  return H.DataStudio.nav().findByRole("link", { name: "Data transformation" });
 }
 
 function getRunsNavLink() {
-  return H.DataStudio.nav().findByRole("link", { name: "Runs" });
+  return H.DataStudio.Transforms.runsTab();
 }
 
 function getTransformsList() {

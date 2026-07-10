@@ -1,6 +1,8 @@
 .nav {
   border-right: 1px solid var(--mb-color-border-neutral);
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .opened {
@@ -83,6 +85,10 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+}
+
+.navFooter {
+  flex-shrink: 0;
 }
 
 .sectionHeading {
