@@ -43,7 +43,7 @@ export const TransformsHeader = memo(function TransformsHeader({
     <PaneHeader
       data-testid="transforms-section-header"
       breadcrumbs={
-        <DataStudioBreadcrumbs>{t`Transforms`}</DataStudioBreadcrumbs>
+        <DataStudioBreadcrumbs>{t`Data transformation`}</DataStudioBreadcrumbs>
       }
       tabs={<PaneHeaderTabs tabs={tabs} />}
       py={0}
