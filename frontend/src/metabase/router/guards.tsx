@@ -8,6 +8,7 @@ import { getAdminPaths } from "metabase/selectors/admin";
 import { getIsEmbeddingIframe } from "metabase/selectors/embed";
 import { getCanAccessOnboardingPage } from "metabase/selectors/onboarding";
 import { getSetting } from "metabase/selectors/settings";
+import { getUser, getUserIsAdmin } from "metabase/selectors/user";
 import { isSameOrSiteUrlOrigin, replaceLocation } from "metabase/utils/dom";
 
 import { Navigate } from "./Navigate";
@@ -119,18 +120,18 @@ const AvailableInEmbedding = createRedirectGuard(
 );
 
 const UserIsAuthenticated = createGuard(
-  { isAllowed: (state) => !!state.currentUser },
+  { isAllowed: (state) => !!getUser(state) },
   (location) => <Navigate to={loginUrlWithRedirect(location)} replace />,
 );
 
 const UserIsAdmin = createRedirectGuard(
-  (state) => Boolean(state.currentUser && state.currentUser.is_superuser),
+  (state) => getUserIsAdmin(state),
   "/unauthorized",
 );
 
 const UserIsNotAuthenticated = createGuard(
   {
-    isAllowed: (state) => !state.currentUser,
+    isAllowed: (state) => !getUser(state),
     isAuthenticating: (state) =>
       state.auth.loginPending || !state.auth.redirect,
   },

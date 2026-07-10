@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { waitFor } from "@testing-library/react";
 import fetchMock from "fetch-mock";
 
+import { seedApiQueryCache } from "__support__/rtk-query-cache";
 import {
   setupCreateCollectionEndpoint,
   setupDeleteCollectionEndpoint,
@@ -9,7 +10,7 @@ import {
   setupRemoteSyncDirtyEndpoint,
   setupUpdateCollectionEndpoint,
 } from "__support__/server-mocks";
-import { Api, sessionApi } from "metabase/api";
+import { Api } from "metabase/api";
 import { collectionApi } from "metabase/api/collection";
 import { remoteSyncApi } from "metabase-enterprise/api/remote-sync";
 import { createMockCollection } from "metabase-types/api/mocks";
@@ -35,6 +36,16 @@ const createTestStore = (settingsOverrides: Record<string, unknown> = {}) => {
     }),
     preloadedState: {
       remoteSyncPlugin: initialState,
+      // Settings are served from the getSessionProperties RTK Query cache.
+      [Api.reducerPath]: seedApiQueryCache(undefined, [
+        {
+          endpointName: "getSessionProperties",
+          value: {
+            "remote-sync-transforms": false,
+            ...settingsOverrides,
+          },
+        },
+      ]),
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -46,20 +57,6 @@ const createTestStore = (settingsOverrides: Record<string, unknown> = {}) => {
         // and the test store's State type (test store uses simplified State)
         .concat(remoteSyncListenerMiddleware.middleware as any),
   });
-
-  // Settings are served from the getSessionProperties RTK Query cache.
-  store.dispatch(
-    sessionApi.util.upsertQueryEntries([
-      {
-        endpointName: "getSessionProperties",
-        arg: undefined,
-        value: {
-          "remote-sync-transforms": false,
-          ...settingsOverrides,
-        } as any,
-      },
-    ]),
-  );
 
   return store;
 };

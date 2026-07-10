@@ -173,13 +173,15 @@ export function getTestStoreAndWrapper({
   customReducers,
   theme,
 }: GetTestStoreAndWrapperOptions) {
-  // There's no `settings` reducer — settings come from the `getSessionProperties`
-  // cache / `window.MetabaseBootstrap`. Pull any seeded settings out of the
-  // preloaded state (so combineReducers doesn't warn about the unknown key) and
-  // seed the bootstrap below.
+  // There's no `settings` or `currentUser` reducer — settings come from the
+  // `getSessionProperties` cache / `window.MetabaseBootstrap`, and the current
+  // user from the `getCurrentUser` cache (seeded by `createMockState`). Strip
+  // the raw fields from the preloaded state so combineReducers doesn't warn
+  // about unknown keys; settings additionally seed the bootstrap below.
   let {
     routing,
     settings: seededSettings,
+    currentUser: _seededUser,
     ...initialState
   }: Partial<StoreSeedState> = createMockState(storeInitialState);
 

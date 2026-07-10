@@ -28,7 +28,13 @@ import { getSdkPackageVersion } from "embedding-sdk-shared/lib/get-build-info";
 import { getWindow } from "embedding-sdk-shared/lib/get-window";
 import type { SdkAuthState } from "embedding-sdk-shared/types/auth-state";
 import { SDK_AUTH_STATE_KEY } from "embedding-sdk-shared/types/auth-state";
-import { refetchSiteSettings, sessionApi } from "metabase/api";
+import {
+  loadCurrentUser,
+  refetchCurrentUser,
+  refetchSiteSettings,
+  sessionApi,
+  userApi,
+} from "metabase/api";
 import { requestSessionTokenFromEmbedJs } from "metabase/embedding/embedding-iframe-sdk/utils";
 import {
   sessionTokenHeaders,
@@ -42,7 +48,6 @@ import {
 import { samlTokenStorage } from "metabase/embedding-sdk/lib/saml-token-storage";
 import type { MetabaseEmbeddingSessionToken } from "metabase/embedding-sdk/types/refresh-token";
 import { PLUGIN_API, PLUGIN_EMBEDDING_SDK } from "metabase/plugins";
-import { refreshCurrentUser } from "metabase/redux/user";
 import { createAsyncThunk } from "metabase/redux/utils";
 import MetabaseSettings from "metabase/utils/settings";
 import type { EnterpriseSettings, Settings } from "metabase-types/api";
@@ -103,7 +108,13 @@ PLUGIN_EMBEDDING_SDK_AUTH.initAuth = async (
           metabaseInstanceUrl: authConfig.metabaseInstanceUrl,
         }),
       );
-      dispatch(refreshCurrentUser.fulfilled(authState.user, "", undefined));
+      dispatch(
+        userApi.util.upsertQueryData(
+          "getCurrentUser",
+          undefined,
+          authState.user,
+        ),
+      );
       dispatch(
         sessionApi.util.upsertQueryData(
           "getSessionProperties",
@@ -111,12 +122,13 @@ PLUGIN_EMBEDDING_SDK_AUTH.initAuth = async (
           authState.siteSettings as EnterpriseSettings,
         ),
       );
-      // Pin the upserted entry with a never-released subscription (it's
-      // fulfilled, so no request fires). A tag invalidation outright deletes
-      // zero-subscriber entries instead of refetching them, and an SDK host
-      // page has no bootstrap to fall back to. This mirrors the non-bootstrap
-      // path, whose refetchSiteSettings subscription below is also never
-      // released.
+      // Pin both upserted entries with never-released subscriptions (the
+      // entries are fulfilled, so no request fires). A tag invalidation
+      // outright deletes zero-subscriber entries instead of refetching them,
+      // and an SDK host page has no bootstrap to fall back to. This mirrors
+      // the non-bootstrap path, whose refetch subscriptions below are also
+      // never released.
+      dispatch(loadCurrentUser());
       dispatch(sessionApi.endpoints.getSessionProperties.initiate());
       MetabaseSettings.setAll(authState.siteSettings as Settings);
 
@@ -171,11 +183,11 @@ PLUGIN_EMBEDDING_SDK_AUTH.initAuth = async (
 
   // Fetch user and site settings
   const [user, siteSettings] = await Promise.all([
-    dispatch(refreshCurrentUser()),
+    dispatch(refetchCurrentUser()),
     dispatch(refetchSiteSettings()),
   ]);
 
-  if (!user.payload) {
+  if (!user.data) {
     if (EMBEDDING_SDK_IFRAME_EMBEDDING_CONFIG.useExistingUserSession) {
       throw MetabaseError.EXISTING_USER_SESSION_FAILED();
     }

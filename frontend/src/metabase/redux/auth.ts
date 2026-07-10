@@ -5,11 +5,10 @@ import {
   createReducer,
 } from "@reduxjs/toolkit";
 
-import { refetchSiteSettings } from "metabase/api";
+import { Api, refetchCurrentUser, refetchSiteSettings } from "metabase/api";
 import { loadLocalization } from "metabase/api/localization";
 import { sessionApi } from "metabase/api/session";
 import { openNavbar } from "metabase/redux/app";
-import { clearCurrentUser, refreshCurrentUser } from "metabase/redux/user";
 import { createAsyncThunk } from "metabase/redux/utils";
 import { push } from "metabase/router";
 import { getSetting } from "metabase/selectors/settings";
@@ -48,7 +47,7 @@ export const refreshSession = createAsyncThunk(
   REFRESH_SESSION,
   async (_, { dispatch }) => {
     await Promise.all([
-      dispatch(refreshCurrentUser()),
+      dispatch(refetchCurrentUser()),
       dispatch(refetchSiteSettings()),
     ]);
     await dispatch(refreshLocale()).unwrap();
@@ -123,20 +122,30 @@ export const logout = createAsyncThunk(
         const { "saml-logout-url": samlLogoutUrl } =
           (await initiateSLO(dispatch)) ?? {};
 
-        dispatch(clearCurrentUser());
         await dispatch(refreshLocale()).unwrap();
+
+        // The session is over: all cached API data (current user included) is
+        // for a session that no longer exists. Reset last — mounted query
+        // hooks refetch immediately after a reset, so doing it any earlier
+        // fires a burst of doomed 401 requests from the still-mounted page.
+        dispatch(Api.util.resetApiState());
 
         if (samlLogoutUrl) {
           window.location.href = samlLogoutUrl;
         }
       } else {
         await deleteSession(dispatch);
-        dispatch(clearCurrentUser());
         await dispatch(refreshLocale()).unwrap();
 
         // We use old react-router-redux which references old redux, which does not require
         // action type to be a string - unlike RTK v2+
         dispatch(push(Urls.login()) as unknown as UnknownAction);
+        // The session is over: all cached API data (current user included) is
+        // for a session that no longer exists. Reset after navigating — mounted
+        // query hooks refetch immediately after a reset, so resetting on the
+        // old page fires a burst of doomed 401 requests; `reload` below cuts
+        // any stragglers short.
+        dispatch(Api.util.resetApiState());
         reload(); // clears redux state and browser caches
       }
     } catch (error) {
