@@ -166,6 +166,7 @@ export const MetabotProvider = ({
     let ctx: MetabotChatContext = {
       user_is_viewing: [],
       current_time_with_timezone: dayjs.tz(dayjs()).format(),
+      // Unjustified type cast. FIXME
       capabilities: _.compact([
         hasDataAccess && "permission:save_questions",
         hasNativeWrite && "permission:write_sql_queries",

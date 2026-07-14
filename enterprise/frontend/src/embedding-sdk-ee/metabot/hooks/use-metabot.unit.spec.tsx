@@ -34,14 +34,19 @@ const makeCard = (id: string, sourceTable = 1): GeneratedCard => ({
   display: "table",
 });
 
-const cardMessage = (id: string, sourceTable = 1) => ({
-  agentId: "omnibot" as const,
-  type: "data_part" as const,
-  part: {
-    type: "data-generated_entity" as const,
-    data: makeCard(id, sourceTable),
-  },
-});
+const cardMessage = (id: string, sourceTable = 1) =>
+  // `addAgentMessage` types its payload with a non-distributive `Omit` that
+  // collapses the message union to common keys, so the branch-specific `part`
+  // field fails excess-property checks (see the fuller note in the
+  // "maps agent.text passthrough" test below).
+  ({
+    agentId: "omnibot",
+    type: "data_part",
+    part: {
+      type: "data-generated_entity",
+      data: makeCard(id, sourceTable),
+    },
+  }) as any;
 
 const cardPath = (id: string, sourceTable = 1) =>
   getGeneratedCardPath(makeCard(id, sourceTable));
@@ -277,9 +282,7 @@ describe("useMetabot", () => {
       const { store } = setup({ ui: <TestMessages /> });
 
       act(() => {
-        store.dispatch(
-          metabotActions.addAgentMessage(cardMessage("c1") as any),
-        );
+        store.dispatch(metabotActions.addAgentMessage(cardMessage("c1")));
       });
 
       const [message] = await readMessages();
@@ -301,6 +304,7 @@ describe("useMetabot", () => {
       act(() => {
         store.dispatch(metabotActions.setDebugMode(true));
         store.dispatch(
+          // Unjustified type cast. FIXME
           metabotActions.addAgentMessage({
             agentId: "omnibot",
             type: "tool_call",
@@ -309,6 +313,7 @@ describe("useMetabot", () => {
           } as any),
         );
         store.dispatch(
+          // Unjustified type cast. FIXME
           metabotActions.addAgentMessage({
             agentId: "omnibot",
             type: "edit_suggestion",
@@ -327,6 +332,7 @@ describe("useMetabot", () => {
           } as any),
         );
         store.dispatch(
+          // Unjustified type cast. FIXME
           metabotActions.addAgentMessage({
             agentId: "omnibot",
             type: "todo_list",
@@ -341,6 +347,7 @@ describe("useMetabot", () => {
           } as any),
         );
         store.dispatch(
+          // Unjustified type cast. FIXME
           metabotActions.addAgentMessage({
             agentId: "omnibot",
             type: "text",
@@ -371,12 +378,8 @@ describe("useMetabot", () => {
             message: "first",
           }),
         );
-        store.dispatch(
-          metabotActions.addAgentMessage(cardMessage("c1a", 1) as any),
-        );
-        store.dispatch(
-          metabotActions.addAgentMessage(cardMessage("c1b", 2) as any),
-        );
+        store.dispatch(metabotActions.addAgentMessage(cardMessage("c1a", 1)));
+        store.dispatch(metabotActions.addAgentMessage(cardMessage("c1b", 2)));
         store.dispatch(
           metabotActions.addUserMessage({
             agentId: "omnibot",
@@ -385,9 +388,7 @@ describe("useMetabot", () => {
             message: "second",
           }),
         );
-        store.dispatch(
-          metabotActions.addAgentMessage(cardMessage("c2", 3) as any),
-        );
+        store.dispatch(metabotActions.addAgentMessage(cardMessage("c2", 3)));
       });
 
       const messages = await readMessages();
@@ -484,9 +485,7 @@ describe("useMetabot", () => {
       const { store } = setup({ ui: <TestChart /> });
 
       act(() => {
-        store.dispatch(
-          metabotActions.addAgentMessage(cardMessage("c1") as any),
-        );
+        store.dispatch(metabotActions.addAgentMessage(cardMessage("c1")));
       });
 
       expect(await screen.findByTestId("mock-static-question")).toBeVisible();
@@ -496,9 +495,7 @@ describe("useMetabot", () => {
       const { store } = setup({ ui: <TestChart drills /> });
 
       act(() => {
-        store.dispatch(
-          metabotActions.addAgentMessage(cardMessage("c1") as any),
-        );
+        store.dispatch(metabotActions.addAgentMessage(cardMessage("c1")));
       });
 
       expect(
@@ -531,9 +528,7 @@ describe("useMetabot", () => {
             message: "first",
           }),
         );
-        store.dispatch(
-          metabotActions.addAgentMessage(cardMessage("c-abc", 1) as any),
-        );
+        store.dispatch(metabotActions.addAgentMessage(cardMessage("c-abc", 1)));
       });
 
       await waitFor(() => {
@@ -552,9 +547,7 @@ describe("useMetabot", () => {
             message: "second",
           }),
         );
-        store.dispatch(
-          metabotActions.addAgentMessage(cardMessage("c-xyz", 2) as any),
-        );
+        store.dispatch(metabotActions.addAgentMessage(cardMessage("c-xyz", 2)));
       });
 
       await waitFor(() => {

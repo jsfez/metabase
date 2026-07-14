@@ -90,6 +90,7 @@ export const isKnownDataPart = (part: {
   type: string;
   data: unknown;
 }): part is KnownDataPart =>
+  // Unjustified type cast. FIXME
   (knownDataPartTypes as readonly string[]).includes(part.type);
 
 export function getGeneratedCardPath(card: GeneratedCard): string {
