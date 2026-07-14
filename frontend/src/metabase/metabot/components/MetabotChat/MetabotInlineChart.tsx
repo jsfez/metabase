@@ -3,10 +3,10 @@ import { noop } from "underscore";
 
 import { useGetAdhocQueryQuery } from "metabase/api";
 import type { GeneratedCard } from "metabase/api/ai-streaming/schemas";
-import { getGeneratedCardPath } from "metabase/api/ai-streaming/schemas";
 import { ForwardRefLink } from "metabase/common/components/Link";
 import { LoadingAndErrorWrapper } from "metabase/common/components/LoadingAndErrorWrapper";
 import { Anchor, Box, Center, Flex } from "metabase/ui";
+import * as Urls from "metabase/urls";
 import Visualization from "metabase/visualizations/components/Visualization";
 import { ErrorView } from "metabase/visualizations/components/Visualization/ErrorView";
 import {
@@ -38,7 +38,7 @@ export function MetabotInlineChart({ value }: { value: GeneratedCard }) {
     [datasetQuery, display],
   );
 
-  const link = useMemo(() => getGeneratedCardPath(value), [value]);
+  const link = useMemo(() => Urls.generatedCard(value), [value]);
 
   const { data: dataset, error } = useGetAdhocQueryQuery(datasetQuery);
 

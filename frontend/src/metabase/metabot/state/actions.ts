@@ -8,7 +8,6 @@ import {
   findMatchingInflightAiStreamingRequests,
 } from "metabase/api/ai-streaming";
 import type { ProcessedChatResponse } from "metabase/api/ai-streaming/process-stream";
-import { getGeneratedEntityPath } from "metabase/api/ai-streaming/schemas";
 import { isEmbeddingSdk } from "metabase/embedding-sdk/config";
 import { PLUGIN_AUDIT } from "metabase/plugins";
 import { setIsNativeEditorOpen } from "metabase/redux/query-builder";
@@ -18,6 +17,7 @@ import { createAsyncThunk } from "metabase/redux/utils";
 import { push } from "metabase/router";
 import { getSetting } from "metabase/selectors/settings";
 import { getUser } from "metabase/selectors/user";
+import * as Urls from "metabase/urls";
 import type {
   JSONValue,
   MetabotAgentRequest,
@@ -455,7 +455,7 @@ export const sendAgentRequest = createAsyncThunk<
                   return;
                 }
 
-                const path = getGeneratedEntityPath(part.data);
+                const path = Urls.generatedEntity(part.data);
 
                 if (isEmbeddingSdk()) {
                   if (part.data.type === "card") {
@@ -468,12 +468,12 @@ export const sendAgentRequest = createAsyncThunk<
                 // Unjustified type cast. FIXME
                 dispatch(push(path) as UnknownAction);
               })
-              .with({ type: "data-adhoc_viz" }, (part) => {
-                pushDataPart({ type: "data_part", part });
-              })
-              .with({ type: "data-static_viz" }, (part) => {
-                pushDataPart({ type: "data_part", part });
-              })
+              .with(
+                { type: "data-navigate_to" },
+                { type: "data-adhoc_viz" },
+                { type: "data-static_viz" },
+                () => {},
+              )
               .exhaustive();
           },
           onStart: function handleStart(event) {
