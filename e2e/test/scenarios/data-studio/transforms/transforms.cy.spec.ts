@@ -1915,7 +1915,7 @@ LIMIT
       getRunStatus().should("have.text", "Run in progress…");
 
       getCancelButton().click();
-      H.modal().button("Yes").click();
+      H.modal().button("Cancel run").click();
 
       getRunButton().should("have.text", "Canceling…");
       getRunStatus().should("have.text", "Canceling…");
@@ -1953,7 +1953,7 @@ LIMIT
       getRunStatus().should("have.text", "Run in progress…");
 
       getCancelButton().click();
-      H.modal().button("Yes").click();
+      H.modal().button("Cancel run").click();
 
       getRunButton().should("have.text", "Canceling…");
       getRunStatus().should("have.text", "Canceling…");
