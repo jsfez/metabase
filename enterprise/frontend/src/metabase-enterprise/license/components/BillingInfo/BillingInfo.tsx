@@ -1,10 +1,9 @@
 import { t } from "ttag";
 
 import { SettingHeader } from "metabase/admin/settings/components/SettingHeader";
-import { Alert } from "metabase/common/components/Alert";
 import { ButtonLink } from "metabase/common/components/ExternalLink";
 import { useStoreUrl } from "metabase/common/hooks";
-import { Anchor, Box, Icon, Text } from "metabase/ui";
+import { Alert, Anchor, Box, Icon, Text } from "metabase/ui";
 import type { BillingInfo as IBillingInfo } from "metabase-types/api";
 
 import { BillingInfoTable } from "./BillingInfoTable";
@@ -45,7 +44,7 @@ const BillingInfoError = () => {
     <>
       <SettingHeader id="billing" title={t`Billing`} />
       <Box mt="1rem" data-testid="billing-info-error">
-        <Alert variant="error" icon="warning">
+        <Alert color="error" icon={<Icon name="warning" />}>
           <Text c="text-secondary">
             {t`An error occurred while fetching information about your billing.`}
             <br />
