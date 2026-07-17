@@ -10,6 +10,7 @@ import {
   getSchemasPermission,
   hasPermissionValueInSubgraph,
 } from "metabase/admin/permissions/utils/graph";
+import { DEPRECATED_ALERT_WITH_ICON_STYLES } from "metabase/common/components/deprecated-alert-styles";
 import { PLUGIN_ADVANCED_PERMISSIONS } from "metabase/plugins";
 import { Alert, Flex, Icon, Text } from "metabase/ui";
 import type Database from "metabase-lib/v1/metadata/Database";
@@ -254,7 +255,11 @@ export function getViewDataPermissionsTooRestrictiveWarningModal(
       message: (
         <Flex direction="column" gap="lg">
           <Text>{coreMessage}</Text>
-          <Alert color="warning" icon={<Icon name="warning" />}>
+          <Alert
+            color="warning"
+            icon={<Icon name="warning" size={24} />}
+            styles={DEPRECATED_ALERT_WITH_ICON_STYLES}
+          >
             {resetGranularSettingsWarnging}
           </Alert>
         </Flex>

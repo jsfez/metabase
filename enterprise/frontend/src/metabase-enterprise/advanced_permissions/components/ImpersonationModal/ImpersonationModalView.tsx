@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { ExternalLink } from "metabase/common/components/ExternalLink/ExternalLink";
 import { FormFooter } from "metabase/common/components/FormFooter";
 import { Link } from "metabase/common/components/Link/Link";
+import { DEPRECATED_ALERT_WITH_ICON_STYLES } from "metabase/common/components/deprecated-alert-styles";
 import { useDocsUrl } from "metabase/common/hooks";
 import CS from "metabase/css/core/index.css";
 import {
@@ -97,7 +98,11 @@ export const ImpersonationModalView = ({
       </Text>
       {roleRequired ? (
         <>
-          <Alert icon={<Icon name="warning" />} color="warning">
+          <Alert
+            icon={<Icon name="warning" size={24} />}
+            color="warning"
+            styles={DEPRECATED_ALERT_WITH_ICON_STYLES}
+          >
             {t`Connection impersonation requires specifying a user role on the database connection.`}{" "}
             <Link
               variant="brand"
@@ -143,7 +148,11 @@ export const ImpersonationModalView = ({
         </FormProvider>
       ) : (
         <>
-          <Alert icon={<Icon name="warning" />} color="warning">
+          <Alert
+            icon={<Icon name="warning" size={24} />}
+            color="warning"
+            styles={DEPRECATED_ALERT_WITH_ICON_STYLES}
+          >
             {t`To associate a user with a database role, you'll need to give that user at least one user attribute.`}{" "}
             <Link
               variant="brand"

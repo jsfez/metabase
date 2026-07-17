@@ -1,6 +1,7 @@
 import { jt, t } from "ttag";
 
 import { Link } from "metabase/common/components/Link";
+import { DEPRECATED_ALERT_WITH_ICON_STYLES } from "metabase/common/components/deprecated-alert-styles";
 import CS from "metabase/css/core/index.css";
 import { Alert, Box, Code, Icon } from "metabase/ui";
 import * as Urls from "metabase/urls";
@@ -58,7 +59,11 @@ export const ImpersonationWarning = ({
 
   return (
     <Box mb="md">
-      <Alert icon={<Icon name="warning" />} color="warning">
+      <Alert
+        icon={<Icon name="warning" size={24} />}
+        color="warning"
+        styles={DEPRECATED_ALERT_WITH_ICON_STYLES}
+      >
         {isEmpty(databaseUser) ? emptyText : warningText}{" "}
         <Link
           className={CS.link}

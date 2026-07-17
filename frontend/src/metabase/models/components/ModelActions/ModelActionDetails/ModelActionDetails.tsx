@@ -9,6 +9,7 @@ import {
 } from "metabase/api";
 import { useSetArchive } from "metabase/archive/hooks";
 import { Link } from "metabase/common/components/Link";
+import { DEPRECATED_ALERT_WITH_ICON_STYLES } from "metabase/common/components/deprecated-alert-styles";
 import { useConfirmation } from "metabase/common/hooks/use-confirmation";
 import { useSelector } from "metabase/redux";
 import { getMetadata } from "metabase/selectors/metadata";
@@ -148,7 +149,12 @@ function ModelActionDetails({ model }: Props) {
         </ActionsHeader>
       )}
       {database && !hasActionsEnabled && (
-        <Alert w="70%" icon={<Icon name="warning" />} color="error">
+        <Alert
+          w="70%"
+          icon={<Icon name="warning" size={24} />}
+          color="error"
+          styles={DEPRECATED_ALERT_WITH_ICON_STYLES}
+        >
           {t`Running Actions is not enabled for database ${database.displayName()}`}
         </Alert>
       )}

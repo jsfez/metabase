@@ -7,6 +7,7 @@ import { getErrorComponent } from "embedding-sdk-bundle/store/selectors";
 import type { SdkErrorComponentProps } from "embedding-sdk-bundle/types";
 import { ERROR_DOC_LINKS } from "embedding-sdk-shared/errors";
 import type { MetabaseErrorCode } from "embedding-sdk-shared/errors/error-code";
+import { DEPRECATED_ALERT_WITH_ICON_STYLES } from "metabase/common/components/deprecated-alert-styles";
 import { EMBEDDING_SDK_PORTAL_ROOT_ELEMENT_ID } from "metabase/embedding-sdk/config";
 import {
   Alert,
@@ -105,9 +106,10 @@ const DefaultErrorMessage = ({ message, onClose }: SdkErrorComponentProps) => (
   <Box p="sm" maw={600}>
     <Alert
       color="error"
-      icon={<Icon name="warning" />}
+      icon={<Icon name="warning" size={24} />}
       withCloseButton={Boolean(onClose)}
       onClose={onClose}
+      styles={DEPRECATED_ALERT_WITH_ICON_STYLES}
     >
       <Box
         style={{
