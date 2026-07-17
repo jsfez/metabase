@@ -163,7 +163,7 @@ export const getRoutes = (store: AppStore) => {
           </Route>
 
           <Route
-            path="collection/entity/:entity_id(**)"
+            path="collection/entity/:entity_id/*"
             element={createEntityIdRedirect({
               parametersToTranslate: [
                 {
@@ -207,7 +207,7 @@ export const getRoutes = (store: AppStore) => {
           </Route>
 
           <Route
-            path="dashboard/entity/:entity_id(**)"
+            path="dashboard/entity/:entity_id/*"
             element={createEntityIdRedirect({
               parametersToTranslate: [
                 {
@@ -234,7 +234,7 @@ export const getRoutes = (store: AppStore) => {
 
           <Route path="/question">
             <Route
-              path="/question/entity/:entity_id(**)"
+              path="/question/entity/:entity_id/*"
               element={createEntityIdRedirect({
                 parametersToTranslate: [
                   {
