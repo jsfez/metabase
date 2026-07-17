@@ -7,7 +7,7 @@ import {
   ReactRouterRoute,
   Router,
   type WithRouterProps,
-  withRouter,
+  reactRouterWithRouter,
 } from "./react-router";
 
 type RouterContextType = WithRouterProps;
@@ -28,7 +28,7 @@ const RouterContextProviderBase = ({
   );
 };
 
-const RouterContextProvider = withRouter(RouterContextProviderBase);
+const RouterContextProvider = reactRouterWithRouter(RouterContextProviderBase);
 
 type RouterProviderProps = {
   history?: History | undefined;
