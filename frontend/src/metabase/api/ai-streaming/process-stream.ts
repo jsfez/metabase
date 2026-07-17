@@ -13,6 +13,9 @@ import { parseSSEStream } from "./sse-stream";
 import type {
   FinishReason,
   MessageMetadata,
+  ReasoningDeltaEvent,
+  ReasoningEndEvent,
+  ReasoningStartEvent,
   StartEvent,
   ToolInputAvailableEvent,
   ToolInputStartEvent,
@@ -37,6 +40,9 @@ export type StreamedError = { errorText: string };
 export type AIStreamingConfig = {
   onStart?: (event: StartEvent) => void;
   onTextPart?: (delta: string) => void;
+  onReasoningStart?: (event: ReasoningStartEvent) => void;
+  onReasoningDelta?: (event: ReasoningDeltaEvent) => void;
+  onReasoningEnd?: (event: ReasoningEndEvent) => void;
   // callback is only called if this version of the client is aware of the received data part type
   onDataPart?: (part: KnownDataPart) => void;
   onToolInputStart?: (event: ToolInputStartEvent) => void;
@@ -87,6 +93,9 @@ export async function processChatResponse(
       match(event)
         .with({ type: "start" }, (e) => config.onStart?.(e))
         .with({ type: "text-delta" }, (e) => config.onTextPart?.(e.delta))
+        .with({ type: "reasoning-start" }, (e) => config.onReasoningStart?.(e))
+        .with({ type: "reasoning-delta" }, (e) => config.onReasoningDelta?.(e))
+        .with({ type: "reasoning-end" }, (e) => config.onReasoningEnd?.(e))
         .with({ type: "tool-input-start" }, (e) => config.onToolInputStart?.(e))
         .with({ type: "tool-input-available" }, (e) => {
           toolInputAvailableSchema.validateSync(e, { strict: true });
@@ -152,7 +161,6 @@ export async function processChatResponse(
           //   text:       text-start, text-end
           //   tool:       tool-input-delta, tool-input-error, tool-approval-request,
           //               tool-output-denied
-          //   reasoning:  reasoning-start, reasoning-delta, reasoning-end
           //   sources:    source-url, source-document
           //   files:      file
         });
