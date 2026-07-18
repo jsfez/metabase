@@ -1,0 +1,5 @@
+{
+  "name": "@metabase/argos",
+  "private": true,
+  "type": "module"
+}

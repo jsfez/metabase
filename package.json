@@ -181,6 +181,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@argos-ci/playwright": "^7.3.6",
     "@babel/cli": "^7.23.0",
     "@babel/core": "7.29.7",
     "@babel/eslint-parser": "^7.25.1",
@@ -204,6 +205,7 @@
     "@lezer/generator": "^1.7.2",
     "@loki/create-async-callback": "^0.35.0",
     "@microsoft/api-extractor": "^7.58.7",
+    "@playwright/test": "^1.61.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@redocly/cli": "^2.14.3",
     "@rspack/cli": "^2.0.3",
